@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Tasarım Testi - Test Senaryosu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2ecc71;
+            --secondary-dark: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --text-color: #444;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-left: 20px;
+        }
+        
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-title h1 {
+            font-size: 2rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        .section-title p {
+            color: #666;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-success {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-success:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--danger-color);
+            opacity: 0.9;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background-color: var(--warning-color);
+            opacity: 0.9;
+        }
+        
+        .device-info {
+            background-color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+        
+        .device-info p {
+            margin-bottom: 10px;
+        }
+        
+        .device-info strong {
+            color: var(--primary-color);
+        }
+        
+        .device-simulator {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .device-controls {
+            margin-bottom: 20px;
+        }
+        
+        .device-frame-container {
+            position: relative;
+            margin: 0 auto;
+            max-width: 100%;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .device-frame {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            transition: width 0.3s ease;
+            height: 500px;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .device-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .device-size-info {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Toast Message Stili */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toast {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease forwards;
+            max-width: 350px;
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .toast-message {
+            flex: 1;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 10px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        
+        .toast-close:hover {
+            opacity: 1;
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-bottom: 15px;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                display: none;
+            }
+            
+            .nav-menu.active {
+                display: flex;
+            }
+            
+            .nav-menu li {
+                margin: 10px 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+            }
+            
+            .device-controls .btn {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <div class="logo">Responsive Test</div>
+                <button class="mobile-menu-btn">☰</button>
+                <ul class="nav-menu">
+                    <li><a href="/">Ana Sayfa</a></li>
+                    <li><a href="#device-simulator">Cihaz Simülatörü</a></li>
+                    <li><a href="#device-info">Cihaz Bilgisi</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="section-title">
+            <h1>Responsive Tasarım Testi</h1>
+            <p>Farklı ekran boyutlarında web sayfalarının nasıl göründüğünü test edin</p>
+        </div>
+        
+        <div id="device-info" class="device-info">
+            <h2>Mevcut Cihaz Bilgisi</h2>
+            <p>Ekran Genişliği: <strong id="screenWidth">-</strong>px</p>
+            <p>Cihaz Tipi: <strong id="deviceType">-</strong></p>
+        </div>
+        
+        <div id="device-simulator" class="device-simulator">
+            <h2>Cihaz Simülatörü</h2>
+            <p>Aşağıdaki butonları kullanarak farklı cihaz boyutlarında web sayfalarını görüntüleyin:</p>
+            
+            <div class="device-controls">
+                <button class="btn btn-warning" onclick="changeDeviceView('mobile')">Mobil Görünüm</button>
+                <button class="btn btn-warning" onclick="changeDeviceView('tablet')">Tablet Görünüm</button>
+                <button class="btn btn-warning" onclick="changeDeviceView('laptop')">Dizüstü Görünüm</button>
+                <button class="btn btn-warning" onclick="changeDeviceView('desktop')">Masaüstü Görünüm</button>
+                <button class="btn" onclick="resetDeviceView()">Sıfırla</button>
+            </div>
+            
+            <div class="device-frame-container">
+                <div id="deviceFrame" class="device-frame" style="width: 100%;">
+                    <iframe src="/" title="Simüle Edilmiş Görünüm"></iframe>
+                </div>
+                <div id="deviceSizeInfo" class="device-size-info">Tam Boyut</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Responsive Test Araçları</h2>
+            </div>
+            <div class="card-body">
+                <p>Responsive tasarımınızı test etmek için aşağıdaki yöntemleri kullanabilirsiniz:</p>
+                <ul>
+                    <li>Tarayıcı penceresini yeniden boyutlandırma</li>
+                    <li>Tarayıcının geliştirici araçlarındaki cihaz emülatörünü kullanma</li>
+                    <li>Farklı cihazlarda test etme (telefon, tablet, masaüstü)</li>
+                </ul>
+                <p>Bu sayfayı farklı ekran boyutlarında test ederek, responsive tasarımın nasıl çalıştığını görebilirsiniz.</p>
+                <a href="/" class="btn">Ana Sayfaya Dön</a>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Test Senaryoları. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+    
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Mobil menü toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            showToast('Mobil menü durumu değiştirildi.', 'info');
+        });
+        
+        // Cihaz bilgisi güncelleme
+        function updateDeviceInfo() {
+            const screenWidth = window.innerWidth;
+            document.getElementById('screenWidth').textContent = screenWidth;
+            
+            let deviceType = 'Masaüstü';
+            if (screenWidth <= 480) {
+                deviceType = 'Mobil Telefon';
+            } else if (screenWidth <= 768) {
+                deviceType = 'Tablet';
+            } else if (screenWidth <= 992) {
+                deviceType = 'Dizüstü';
+            }
+            
+            document.getElementById('deviceType').textContent = deviceType;
+        }
+        
+        // Sayfa yüklendiğinde ve pencere boyutu değiştiğinde cihaz bilgisini güncelle
+        window.addEventListener('load', updateDeviceInfo);
+        window.addEventListener('resize', updateDeviceInfo);
+        
+        // Cihaz görünümünü değiştir
+        function changeDeviceView(deviceType) {
+            const deviceFrame = document.getElementById('deviceFrame');
+            const deviceSizeInfo = document.getElementById('deviceSizeInfo');
+            
+            switch(deviceType) {
+                case 'mobile':
+                    deviceFrame.style.width = '320px';
+                    deviceSizeInfo.textContent = 'Mobil (320px)';
+                    break;
+                case 'tablet':
+                    deviceFrame.style.width = '768px';
+                    deviceSizeInfo.textContent = 'Tablet (768px)';
+                    break;
+                case 'laptop':
+                    deviceFrame.style.width = '992px';
+                    deviceSizeInfo.textContent = 'Dizüstü (992px)';
+                    break;
+                case 'desktop':
+                    deviceFrame.style.width = '1200px';
+                    deviceSizeInfo.textContent = 'Masaüstü (1200px)';
+                    break;
+            }
+            
+            showToast(`${deviceSizeInfo.textContent} görünümüne geçildi.`, 'success');
+        }
+        
+        // Cihaz görünümünü sıfırla
+        function resetDeviceView() {
+            const deviceFrame = document.getElementById('deviceFrame');
+            const deviceSizeInfo = document.getElementById('deviceSizeInfo');
+            
+            deviceFrame.style.width = '100%';
+            deviceSizeInfo.textContent = 'Tam Boyut';
+            
+            showToast('Cihaz görünümü sıfırlandı.', 'info');
+        }
+        
+        // Toast message göster
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Toast'ı kapat butonu
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Otomatik kapat
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Sayfa yüklendiğinde toast göster
+        window.addEventListener('load', function() {
+            showToast('Responsive tasarım testi sayfası yüklendi. Tarayıcı penceresini yeniden boyutlandırarak testi yapabilirsiniz.', 'success');
+        });
+        
+        // Bağlantılara tıklandığında
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                    
+                    showToast(`"${this.textContent}" bölümüne kaydırıldı.`, 'info');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

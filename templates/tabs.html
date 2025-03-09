@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tab Testi - Test Senaryosu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2ecc71;
+            --secondary-dark: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --text-color: #444;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .card-header h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* Tab Stilleri */
+        .tabs {
+            margin-top: 20px;
+        }
+        
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            transition: var(--transition);
+            outline: none;
+        }
+        
+        .tab-button:hover {
+            color: var(--primary-color);
+        }
+        
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 10px 0;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Doğrulama Kartı */
+        .validation-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .validation-card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .validation-card-header h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        
+        .validation-card-body {
+            padding: 0;
+        }
+        
+        .validation-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .validation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .validation-label {
+            font-weight: 500;
+        }
+        
+        .validation-status {
+            font-weight: 500;
+        }
+        
+        .valid {
+            color: var(--secondary-color);
+        }
+        
+        .invalid {
+            color: var(--danger-color);
+        }
+        
+        /* Toast Mesajları */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toast {
+            min-width: 250px;
+            background-color: white;
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            animation: slideInLeft 0.3s, fadeIn 0.3s;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .toast-message {
+            flex: 1;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: var(--transition);
+        }
+        
+        .toast-close:hover {
+            color: var(--dark-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tab Testi</h1>
+            <p>Tab içeriklerini kontrol etmek için test senaryosu</p>
+        </header>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Tablar</h2>
+            </div>
+            <div class="card-body">
+                <h3>Lorem Ipsum Hakkında Detaylar</h3>
+                
+                <div class="tabs">
+                    <div class="tab-header">
+                        <button class="tab-button active" data-tab="tab1">Ne</button>
+                        <button class="tab-button" data-tab="tab2">Köken</button>
+                        <button class="tab-button" data-tab="tab3">Kullanım</button>
+                        <button class="tab-button" data-tab="tab4">Örnekler</button>
+                        <button class="tab-button" data-tab="tab5">Daha Fazla</button>
+                    </div>
+                    
+                    <div id="tab1" class="tab-content active">
+                        <p>Lorem Ipsum, masaüstü yayıncılık ve basın yayın sektöründe kullanılan taklit yazı bloğu olarak tanımlanır. Lipsum, oluşturulacak şablon ve taslaklarda içerik yerine geçerek yazı bloğunu doldurmak için kullanılır.</p>
+                        <p>Yayın ve basın endüstrisinin geçici metinleridir. Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden beri endüstri standardı haline gelmiştir.</p>
+                    </div>
+                    
+                    <div id="tab2" class="tab-content">
+                        <p>Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. Kökleri M.Ö. 45 tarihinden bu yana klasik Latin edebiyatına kadar uzanan 2000 yıllık bir geçmişi vardır.</p>
+                        <p>Virginia'daki Hampden-Sydney College'dan Latince profesörü Richard McClintock, bir Lorem Ipsum pasajında geçen ve anlaşılması en güç sözcüklerden biri olan 'consectetur' sözcüğünün klasik edebiyattaki örneklerini incelediğinde kesin bir kaynağa ulaşmıştır.</p>
+                        <p>Lorm Ipsum, Çiçero tarafından M.Ö. 45 tarihinde kaleme alınan "de Finibus Bonorum et Malorum" (İyi ve Kötünün Uç Sınırları) eserinin 1.10.32 ve 1.10.33 sayılı bölümlerinden gelmektedir.</p>
+                    </div>
+                    
+                    <div id="tab3" class="tab-content">
+                        <p>Lorem Ipsum pasajlarının birçok çeşitlemesi vardır. Ancak bunların büyük bir çoğunluğu mizah katılarak veya rastgele sözcükler eklenerek değiştirilmişlerdir.</p>
+                        <p>Eğer bir Lorem Ipsum pasajı kullanacaksanız, metin aralarına utandırıcı sözcükler gizlenmediğinden emin olmanız gerekir. İnternet'teki tüm Lorem Ipsum üreteçleri önceden belirlenmiş metin bloklarını yineler.</p>
+                        <p>Bu da, bu üreteci İnternet üzerindeki gerçek Lorem Ipsum üreteci yapar. Bu üreteç, 200'den fazla Latince sözcük ve onlara ait cümle yapılarını içeren bir sözlük kullanır.</p>
+                    </div>
+                    
+                    <div id="tab4" class="tab-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.</p>
+                        <p>Fusce venenatis tellus vitae felis vehicula, non pellentesque dui condimentum.</p>
+                        <p>Vivamus id erat lectus. Suspendisse convallis mauris tellus, eu placerat tellus efficitur eu.</p>
+                        <p>Vestibulum non lobortis lorem, eget porttitor est. Sed nec efficitur sapien.</p>
+                    </div>
+                    
+                    <div id="tab5" class="tab-content">
+                        <p>Lorem Ipsum hakkında daha fazla bilgi için aşağıdaki kaynaklara başvurabilirsiniz:</p>
+                        <ul>
+                            <li>Lorem Ipsum Tarihi</li>
+                            <li>Latince Kaynaklar</li>
+                            <li>Lorem Ipsum Üreteçleri</li>
+                            <li>Tasarımda Lorem Ipsum Kullanımı</li>
+                            <li>Alternatif Metin Üreteçleri</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="validation-card">
+            <div class="validation-card-header">
+                <h3>Tab İçerik Doğrulama</h3>
+            </div>
+            <div class="validation-card-body">
+                <div class="validation-item">
+                    <span class="validation-label">Ne (Tab 1):</span>
+                    <span id="tab1Validation" class="validation-status valid">Doğrulandı</span>
+                </div>
+                <div class="validation-item">
+                    <span class="validation-label">Köken (Tab 2):</span>
+                    <span id="tab2Validation" class="validation-status invalid">Doğrulanmadı</span>
+                </div>
+                <div class="validation-item">
+                    <span class="validation-label">Kullanım (Tab 3):</span>
+                    <span id="tab3Validation" class="validation-status invalid">Doğrulanmadı</span>
+                </div>
+                <div class="validation-item">
+                    <span class="validation-label">Örnekler (Tab 4):</span>
+                    <span id="tab4Validation" class="validation-status invalid">Doğrulanmadı</span>
+                </div>
+                <div class="validation-item">
+                    <span class="validation-label">Daha Fazla (Tab 5):</span>
+                    <span id="tab5Validation" class="validation-status invalid">Doğrulanmadı</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toastContainer"></div>
+    
+    <script>
+        // Tab işlevselliği
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Tab doğrulama durumları
+        const tabValidations = {
+            tab1: document.getElementById('tab1Validation'),
+            tab2: document.getElementById('tab2Validation'),
+            tab3: document.getElementById('tab3Validation'),
+            tab4: document.getElementById('tab4Validation'),
+            tab5: document.getElementById('tab5Validation')
+        };
+        
+        // Tab içerik kontrol fonksiyonu
+        function validateTabContent(tabId) {
+            const tabContent = document.getElementById(tabId);
+            if (tabContent && tabContent.textContent.trim().length > 0) {
+                tabValidations[tabId].textContent = 'Doğrulandı';
+                tabValidations[tabId].classList.add('valid');
+                tabValidations[tabId].classList.remove('invalid');
+                return true;
+            } else {
+                tabValidations[tabId].textContent = 'Doğrulanmadı';
+                tabValidations[tabId].classList.add('invalid');
+                tabValidations[tabId].classList.remove('valid');
+                return false;
+            }
+        }
+        
+        // Tab değiştirme işlevi
+        function changeTab(tabId) {
+            // Aktif tab butonunu güncelle
+            tabButtons.forEach(button => {
+                if (button.dataset.tab === tabId) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            
+            // Aktif tab içeriğini göster
+            tabContents.forEach(content => {
+                if (content.id === tabId) {
+                    content.classList.add('active');
+                    // Tab içeriğini doğrula
+                    const isValid = validateTabContent(tabId);
+                    if (isValid) {
+                        showToast(`${tabId} içeriği doğrulandı!`, 'success');
+                    } else {
+                        showToast(`${tabId} içeriği boş veya geçersiz!`, 'error');
+                    }
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+        
+        // Tab butonlarına tıklama olayı ekle
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                changeTab(tabId);
+            });
+        });
+        
+        // Toast message göster
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Toast'ı kapat butonu
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Otomatik kapat
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+        
+        // Sayfa yüklendiğinde ilk tab'ı doğrula
+        document.addEventListener('DOMContentLoaded', function() {
+            validateTabContent('tab1');
+            showToast('Tab testi sayfası yüklendi!', 'info');
+        });
+    </script>
+</body>
+</html> 

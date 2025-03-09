@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Elemanları Testi - Test Senaryosu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2ecc71;
+            --secondary-dark: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --text-color: #444;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .form-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .form-section h2 {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+        
+        .form-section-content {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        input[type="checkbox"],
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-group label,
+        .radio-group label {
+            display: inline;
+            margin: 0;
+            font-weight: normal;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-success {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-success:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background-color: #d35400;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .result h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        /* Toast mesajları */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toast {
+            min-width: 250px;
+            background-color: white;
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            animation: slideInLeft 0.3s, fadeIn 0.3s;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .toast-message {
+            flex: 1;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: var(--transition);
+        }
+        
+        .toast-close:hover {
+            color: var(--dark-color);
+        }
+        
+        /* Responsive tasarım */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Form Elemanları Testi</h1>
+            <p>Bu sayfada çeşitli form elemanlarını test edebilirsiniz.</p>
+        </header>
+        
+        <div class="form-section">
+            <h2>Metin Kutuları (Text Boxes)</h2>
+            <div class="form-section-content">
+                <div class="form-group">
+                    <label for="name">Ad Soyad:</label>
+                    <input type="text" id="name" placeholder="Adınızı ve soyadınızı girin">
+                </div>
+                <div class="form-group">
+                    <label for="email">E-posta:</label>
+                    <input type="email" id="email" placeholder="E-posta adresinizi girin">
+                </div>
+                <div class="form-group">
+                    <label for="password">Şifre:</label>
+                    <input type="password" id="password" placeholder="Şifrenizi girin">
+                </div>
+                <div class="form-group">
+                    <label for="age">Yaş:</label>
+                    <input type="number" id="age" min="18" max="100" placeholder="Yaşınızı girin">
+                </div>
+                <div class="form-group">
+                    <label for="message">Mesaj:</label>
+                    <textarea id="message" rows="4" placeholder="Mesajınızı girin"></textarea>
+                </div>
+                <button class="btn" onclick="validateTextBoxes()">Metin Kutularını Doğrula</button>
+                <div id="textBoxResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Onay Kutuları (Checkboxes)</h2>
+            <div class="form-section-content">
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="hobby1" name="hobbies" value="Okuma">
+                        <label for="hobby1">Kitap Okuma</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="hobby2" name="hobbies" value="Spor">
+                        <label for="hobby2">Spor Yapma</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="hobby3" name="hobbies" value="Müzik">
+                        <label for="hobby3">Müzik Dinleme</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="hobby4" name="hobbies" value="Seyahat">
+                        <label for="hobby4">Seyahat Etme</label>
+                    </div>
+                </div>
+                <button class="btn" onclick="validateCheckboxes()">Seçili Hobileri Göster</button>
+                <div id="checkboxResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Radyo Düğmeleri (Radio Buttons)</h2>
+            <div class="form-section-content">
+                <div class="form-group">
+                    <div class="radio-group">
+                        <input type="radio" id="gender1" name="gender" value="Erkek">
+                        <label for="gender1">Erkek</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="gender2" name="gender" value="Kadın">
+                        <label for="gender2">Kadın</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="gender3" name="gender" value="Belirtmek İstemiyorum">
+                        <label for="gender3">Belirtmek İstemiyorum</label>
+                    </div>
+                </div>
+                <button class="btn" onclick="validateRadioButtons()">Seçili Cinsiyeti Göster</button>
+                <div id="radioResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Düğmeler (Buttons)</h2>
+            <div class="form-section-content">
+                <div class="form-group">
+                    <button class="btn" onclick="showToast('Normal düğmeye tıklandı.', 'info')">Normal Düğme</button>
+                    <button class="btn btn-success" onclick="showToast('Başarı düğmesine tıklandı.', 'success')">Başarı Düğmesi</button>
+                    <button class="btn btn-danger" onclick="showToast('Tehlike düğmesine tıklandı.', 'error')">Tehlike Düğmesi</button>
+                    <button class="btn btn-warning" onclick="showToast('Uyarı düğmesine tıklandı.', 'warning')">Uyarı Düğmesi</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Açılır Menü (Dropdown)</h2>
+            <div class="form-section-content">
+                <div class="form-group">
+                    <label for="country">Ülke:</label>
+                    <select id="country">
+                        <option value="">Ülke Seçin</option>
+                        <option value="TR">Türkiye</option>
+                        <option value="US">Amerika Birleşik Devletleri</option>
+                        <option value="GB">Birleşik Krallık</option>
+                        <option value="DE">Almanya</option>
+                        <option value="FR">Fransa</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="validateDropdown()">Seçili Ülkeyi Göster</button>
+                <div id="dropdownResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Tarih ve Saat Seçiciler</h2>
+            <div class="form-section-content">
+                <div class="form-group">
+                    <label for="date">Tarih:</label>
+                    <input type="date" id="date">
+                </div>
+                <div class="form-group">
+                    <label for="time">Saat:</label>
+                    <input type="time" id="time">
+                </div>
+                <div class="form-group">
+                    <label for="datetime">Tarih ve Saat:</label>
+                    <input type="datetime-local" id="datetime">
+                </div>
+                <button class="btn" onclick="validateDateTime()">Seçili Tarihleri Göster</button>
+                <div id="dateTimeResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Dosya Yükleme</h2>
+            <div class="form-section-content">
+                <div class="form-group">
+                    <label for="file">Dosya Seçin:</label>
+                    <input type="file" id="file">
+                </div>
+                <div class="form-group">
+                    <label for="multipleFiles">Çoklu Dosya Seçin:</label>
+                    <input type="file" id="multipleFiles" multiple>
+                </div>
+                <button class="btn" onclick="validateFiles()">Seçili Dosyaları Göster</button>
+                <div id="fileResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Renk Seçici</h2>
+            <div class="form-section-content">
+                <div class="form-group">
+                    <label for="color">Renk Seçin:</label>
+                    <input type="color" id="color" value="#3498db">
+                </div>
+                <button class="btn" onclick="validateColor()">Seçili Rengi Göster</button>
+                <div id="colorResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Aralık Seçici (Range)</h2>
+            <div class="form-section-content">
+                <div class="form-group">
+                    <label for="range">Değer Seçin (0-100):</label>
+                    <input type="range" id="range" min="0" max="100" value="50">
+                    <span id="rangeValue">50</span>
+                </div>
+                <button class="btn" onclick="validateRange()">Seçili Değeri Göster</button>
+                <div id="rangeResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="form-section-content">
+                <a href="/" class="btn">Ana Sayfaya Dön</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Metin kutularını doğrula
+        function validateTextBoxes() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const age = document.getElementById('age').value;
+            const message = document.getElementById('message').value;
+            
+            let result = '<h3>Metin Kutuları Değerleri:</h3>';
+            result += `<p><strong>Ad Soyad:</strong> ${name || 'Boş'}</p>`;
+            result += `<p><strong>E-posta:</strong> ${email || 'Boş'}</p>`;
+            result += `<p><strong>Şifre:</strong> ${password ? '********' : 'Boş'}</p>`;
+            result += `<p><strong>Yaş:</strong> ${age || 'Boş'}</p>`;
+            result += `<p><strong>Mesaj:</strong> ${message || 'Boş'}</p>`;
+            
+            document.getElementById('textBoxResult').innerHTML = result;
+            document.getElementById('textBoxResult').style.display = 'block';
+            
+            showToast('Metin kutuları doğrulandı.', 'success');
+        }
+        
+        // Onay kutularını doğrula
+        function validateCheckboxes() {
+            const hobbies = document.getElementsByName('hobbies');
+            let selectedHobbies = [];
+            
+            for (let i = 0; i < hobbies.length; i++) {
+                if (hobbies[i].checked) {
+                    selectedHobbies.push(hobbies[i].value);
+                }
+            }
+            
+            let result = '<h3>Seçili Hobiler:</h3>';
+            
+            if (selectedHobbies.length > 0) {
+                result += '<ul>';
+                selectedHobbies.forEach(hobby => {
+                    result += `<li>${hobby}</li>`;
+                });
+                result += '</ul>';
+            } else {
+                result += '<p>Hiçbir hobi seçilmedi.</p>';
+            }
+            
+            document.getElementById('checkboxResult').innerHTML = result;
+            document.getElementById('checkboxResult').style.display = 'block';
+            
+            showToast('Seçili hobiler gösterildi.', 'success');
+        }
+        
+        // Radyo düğmelerini doğrula
+        function validateRadioButtons() {
+            const genderRadios = document.getElementsByName('gender');
+            let selectedGender = null;
+            
+            for (let i = 0; i < genderRadios.length; i++) {
+                if (genderRadios[i].checked) {
+                    selectedGender = genderRadios[i].value;
+                    break;
+                }
+            }
+            
+            let result = '<h3>Seçili Cinsiyet:</h3>';
+            
+            if (selectedGender) {
+                result += `<p>${selectedGender}</p>`;
+            } else {
+                result += '<p>Hiçbir cinsiyet seçilmedi.</p>';
+            }
+            
+            document.getElementById('radioResult').innerHTML = result;
+            document.getElementById('radioResult').style.display = 'block';
+            
+            showToast('Seçili cinsiyet gösterildi.', 'success');
+        }
+        
+        // Açılır menüyü doğrula
+        function validateDropdown() {
+            const countrySelect = document.getElementById('country');
+            const selectedCountry = countrySelect.options[countrySelect.selectedIndex].text;
+            const selectedValue = countrySelect.value;
+            
+            let result = '<h3>Seçili Ülke:</h3>';
+            
+            if (selectedValue) {
+                result += `<p>${selectedCountry} (${selectedValue})</p>`;
+            } else {
+                result += '<p>Hiçbir ülke seçilmedi.</p>';
+            }
+            
+            document.getElementById('dropdownResult').innerHTML = result;
+            document.getElementById('dropdownResult').style.display = 'block';
+            
+            showToast('Seçili ülke gösterildi.', 'success');
+        }
+        
+        // Tarih ve saat seçicileri doğrula
+        function validateDateTime() {
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const datetime = document.getElementById('datetime').value;
+            
+            let result = '<h3>Seçili Tarih ve Saat:</h3>';
+            result += `<p><strong>Tarih:</strong> ${date || 'Seçilmedi'}</p>`;
+            result += `<p><strong>Saat:</strong> ${time || 'Seçilmedi'}</p>`;
+            result += `<p><strong>Tarih ve Saat:</strong> ${datetime || 'Seçilmedi'}</p>`;
+            
+            document.getElementById('dateTimeResult').innerHTML = result;
+            document.getElementById('dateTimeResult').style.display = 'block';
+            
+            showToast('Seçili tarih ve saat gösterildi.', 'success');
+        }
+        
+        // Dosya seçicileri doğrula
+        function validateFiles() {
+            const file = document.getElementById('file').files;
+            const multipleFiles = document.getElementById('multipleFiles').files;
+            
+            let result = '<h3>Seçili Dosyalar:</h3>';
+            
+            if (file.length > 0) {
+                result += `<p><strong>Tek Dosya:</strong> ${file[0].name} (${formatFileSize(file[0].size)})</p>`;
+            } else {
+                result += '<p><strong>Tek Dosya:</strong> Seçilmedi</p>';
+            }
+            
+            if (multipleFiles.length > 0) {
+                result += '<p><strong>Çoklu Dosyalar:</strong></p><ul>';
+                for (let i = 0; i < multipleFiles.length; i++) {
+                    result += `<li>${multipleFiles[i].name} (${formatFileSize(multipleFiles[i].size)})</li>`;
+                }
+                result += '</ul>';
+            } else {
+                result += '<p><strong>Çoklu Dosyalar:</strong> Seçilmedi</p>';
+            }
+            
+            document.getElementById('fileResult').innerHTML = result;
+            document.getElementById('fileResult').style.display = 'block';
+            
+            showToast('Seçili dosyalar gösterildi.', 'success');
+        }
+        
+        // Dosya boyutunu formatla
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Renk seçiciyi doğrula
+        function validateColor() {
+            const color = document.getElementById('color').value;
+            
+            let result = '<h3>Seçili Renk:</h3>';
+            result += `<p style="display: flex; align-items: center;">
+                <span style="display: inline-block; width: 20px; height: 20px; background-color: ${color}; margin-right: 10px; border: 1px solid #ddd;"></span>
+                ${color}
+            </p>`;
+            
+            document.getElementById('colorResult').innerHTML = result;
+            document.getElementById('colorResult').style.display = 'block';
+            
+            showToast('Seçili renk gösterildi.', 'success');
+        }
+        
+        // Aralık seçiciyi doğrula
+        function validateRange() {
+            const range = document.getElementById('range').value;
+            
+            let result = '<h3>Seçili Değer:</h3>';
+            result += `<p>${range}</p>`;
+            result += `<div style="background-color: #eee; height: 20px; border-radius: 10px; overflow: hidden;">
+                <div style="background-color: var(--primary-color); height: 100%; width: ${range}%;"></div>
+            </div>`;
+            
+            document.getElementById('rangeResult').innerHTML = result;
+            document.getElementById('rangeResult').style.display = 'block';
+            
+            showToast('Seçili değer gösterildi.', 'success');
+        }
+        
+        // Aralık değerini güncelle
+        document.getElementById('range').addEventListener('input', function() {
+            document.getElementById('rangeValue').textContent = this.value;
+        });
+        
+        // Toast message göster
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Toast'ı kapat butonu
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Otomatik kapat
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+        
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast('Form elemanları test sayfası yüklendi!', 'info');
+        });
+    </script>
+</body>
+</html> 

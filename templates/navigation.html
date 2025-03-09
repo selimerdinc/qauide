@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigasyon Testi - Test Senaryosu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li {
+            margin: 0 15px;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #3498db;
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+        .content {
+            padding: 40px 0;
+        }
+        .section {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+        .footer-links li {
+            margin: 0 15px;
+        }
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Mobil Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #333;
+                padding: 20px 0;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 10px 0;
+                text-align: center;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+        
+        /* Toast container stilini güncelle */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toast {
+            min-width: 250px;
+            background-color: white;
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            animation: slideInLeft 0.3s, fadeIn 0.3s;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .toast-message {
+            flex: 1;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: var(--transition);
+        }
+        
+        .toast-close:hover {
+            color: var(--dark-color);
+        }
+        
+        .btn {
+            padding: 8px 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Test Senaryoları</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')">Ana Sayfa</a></li>
+                <li><a href="#" onclick="showPage('about')">Hakkımızda</a></li>
+                <li><a href="#" onclick="showPage('contact')">İletişim</a></li>
+            </ul>
+            <button class="mobile-menu-btn">☰</button>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <div class="content">
+            <div class="page active" id="home">
+                <div class="section">
+                    <h2>Ana Sayfa</h2>
+                    <p>Bu test senaryosunda navigasyon işlevselliğini test ediyoruz. Üstteki menü öğelerine tıklayarak farklı sayfalara geçiş yapabilirsiniz.</p>
+                    <p>Şu anda <strong>Ana Sayfa</strong> bölümündesiniz.</p>
+                </div>
+            </div>
+            
+            <div class="page" id="about">
+                <div class="section">
+                    <h2>Hakkımızda</h2>
+                    <p>Burası hakkmızıda sayfasıdır. Test yapmaya devam edebilirsiniz</p>
+                    <p>Otomasyon testleri için test senaryoları oluşturabilirsiniz.</p>
+                    <p>Şu anda <strong>Hakkımızda</strong> bölümündesiniz.</p>
+                </div>
+            </div>
+            
+            <div class="page" id="contact">
+                <div class="section">
+                    <h2>İletişim</h2>
+                    <p>Burası iletişim sayfasıdır. Test yapmaya devam edebilirsiniz</p>
+                    <p>Otomasyon testleri için test senaryoları oluşturabilirsiniz.</p>
+                    <p>Şu anda <strong>İletişim</strong> bölümündesiniz.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <ul class="footer-links">
+            <li><a href="#" onclick="showPage('home')">Ana Sayfa</a></li>
+            <li><a href="#" onclick="showPage('about')">Hakkımızda</a></li>
+            <li><a href="#" onclick="showPage('contact')">İletişim</a></li>
+        </ul>
+        <p>&copy; 2025 Test Senaryoları. Tüm hakları saklıdır.</p>
+    </footer>
+    
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Mobil menü toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Sayfa gösterme fonksiyonu
+        function showPage(pageId) {
+            // Tüm sayfaları gizle
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // İstenen sayfayı göster
+            document.getElementById(pageId).classList.add('active');
+            
+            // Sayfa başlığını al
+            const pageTitle = document.getElementById(pageId).querySelector('h2').textContent;
+            
+            // Toast mesajı göster
+            showToast(`"${pageTitle}" sayfasına geçiş yapıldı.`, 'success');
+        }
+        
+        // Toast message göster
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Toast'ı kapat butonu
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Otomatik kapat
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 

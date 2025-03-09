@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinamik İçerik - Test Senaryosu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .content-area {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 200px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .test-panel {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .nav-btn {
+            display: inline-block;
+            background-color: #34495e;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .nav-btn:hover {
+            background-color: #2c3e50;
+        }
+        .item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 3px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dinamik İçerik Test Senaryosu</h1>
+        
+        <div>
+            <button id="loadDataBtn">Verileri Yükle</button>
+            <button id="addItemBtn">Yeni Öğe Ekle</button>
+            <button id="clearBtn">Temizle</button>
+        </div>
+        
+        <div class="content-area" id="contentArea">
+            <div class="loading" id="loadingIndicator" style="display: none;">Yükleniyor...</div>
+            <div id="dataContainer"></div>
+        </div>
+        
+        <!-- Test Paneli -->
+        <div class="test-panel">
+            <h2>Test Senaryoları</h2>
+            <p>Bu sayfada aşağıdaki durumları test edebilirsiniz:</p>
+            <ul>
+                <li>Veri yükleme butonuna tıklandığında AJAX ile veri yüklenmesi</li>
+                <li>Yükleme sırasında loading göstergesinin görünmesi</li>
+                <li>Yeni öğe ekle butonuna tıklandığında DOM'a yeni element eklenmesi</li>
+                <li>Temizle butonuna tıklandığında içeriğin silinmesi</li>
+            </ul>
+            
+            <h3>Test İpuçları</h3>
+            <ul>
+                <li>"Verileri Yükle" butonuna tıklayın ve yükleme göstergesinin görünüp görünmediğini kontrol edin</li>
+                <li>Verilerin yüklenmesini bekleyin ve içeriğin doğru şekilde gösterilip gösterilmediğini kontrol edin</li>
+                <li>"Yeni Öğe Ekle" butonuna tıklayın ve yeni bir öğenin eklenip eklenmediğini kontrol edin</li>
+                <li>"Temizle" butonuna tıklayın ve içeriğin temizlenip temizlenmediğini kontrol edin</li>
+            </ul>
+        </div>
+        
+        <a href="{{ url_for('index') }}" class="nav-btn">Ana Sayfaya Dön</a>
+    </div>
+    
+    <script>
+        // Buton işlemleri
+        document.getElementById('loadDataBtn').addEventListener('click', function() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const dataContainer = document.getElementById('dataContainer');
+            
+            // Yükleme göstergesini göster
+            loadingIndicator.style.display = 'block';
+            dataContainer.innerHTML = '';
+            
+            // AJAX isteği simülasyonu
+            setTimeout(function() {
+                // API'den veri alma simülasyonu
+                fetch('/api/data')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Yükleme göstergesini gizle
+                        loadingIndicator.style.display = 'none';
+                        
+                        // Verileri göster
+                        data.forEach(item => {
+                            const itemElement = document.createElement('div');
+                            itemElement.className = 'item';
+                            itemElement.innerHTML = `
+                                <h3>${item.name}</h3>
+                                <p>${item.description}</p>
+                            `;
+                            dataContainer.appendChild(itemElement);
+                        });
+                    })
+                    .catch(error => {
+                        loadingIndicator.style.display = 'none';
+                        dataContainer.innerHTML = `<p style="color: red;">Hata: ${error.message}</p>`;
+                    });
+            }, 500);
+        });
+        
+        document.getElementById('addItemBtn').addEventListener('click', function() {
+            const dataContainer = document.getElementById('dataContainer');
+            const itemCount = dataContainer.querySelectorAll('.item').length + 1;
+            
+            const newItem = document.createElement('div');
+            newItem.className = 'item';
+            newItem.innerHTML = `
+                <h3>Yeni Öğe ${itemCount}</h3>
+                <p>Bu yeni eklenen bir öğedir.</p>
+            `;
+            
+            dataContainer.appendChild(newItem);
+        });
+        
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            document.getElementById('dataContainer').innerHTML = '';
+        });
+    </script>
+</body>
+</html> 

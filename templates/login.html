@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Sayfası - Test Senaryosu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .submit-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+        .test-panel {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .nav-btn {
+            display: inline-block;
+            background-color: #34495e;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .nav-btn:hover {
+            background-color: #2c3e50;
+        }
+        
+        /* Toast Message Stili */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            min-width: 250px;
+            background-color: white;
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            animation: slideInLeft 0.3s, fadeIn 0.3s;
+        }
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .toast.success {
+            border-left: 4px solid var(--secondary-color);
+        }
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        .toast-message {
+            flex: 1;
+        }
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: var(--transition);
+        }
+        .toast-close:hover {
+            color: var(--dark-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login Sayfası Testi</h1>
+        
+        <div class="login-form">
+            <h2>Giriş Yap</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Kullanıcı Adı:</label>
+                    <input type="text" id="username" name="username">
+                    <div class="error-message" id="username-error">Kullanıcı adı boş olamaz</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Şifre:</label>
+                    <input type="password" id="password" name="password">
+                    <div class="error-message" id="password-error">Şifre boş olamaz</div>
+                </div>
+                
+                <button type="submit" class="submit-btn">Giriş Yap</button>
+            </form>
+        </div>
+        
+        <div class="test-panel">
+            <h2>Test Senaryoları</h2>
+            <p>Bu sayfada aşağıdaki login işlevlerini test edebilirsiniz:</p>
+            <ul>
+                <li>Boş kullanıcı adı ve şifre ile giriş yapmayı deneyin</li>
+                <li>Sadece kullanıcı adı veya sadece şifre ile giriş yapmayı deneyin</li>
+                <li>Yanlış kullanıcı adı ve şifre kombinasyonu ile giriş yapmayı deneyin</li>
+                <li>Doğru kullanıcı adı ve şifre ile giriş yapmayı deneyin (admin/password123)</li>
+            </ul>
+            
+            <h3>Test İpuçları</h3>
+            <ul>
+                <li>Form doğrulama mesajlarının doğru gösterilip gösterilmediğini kontrol edin</li>
+                <li>Başarılı ve başarısız giriş durumlarında doğru geri bildirimlerin verilip verilmediğini kontrol edin</li>
+                <li>Kasıtlı olarak eklenen hataları bulmaya çalışın (örneğin, şifre doğrulaması eksik olabilir)</li>
+            </ul>
+        </div>
+        
+        <a href="{{ url_for('index') }}" class="nav-btn">Ana Sayfaya Dön</a>
+    </div>
+    
+    <!-- Toast Message Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Toast message göster
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Toast'ı kapat butonu
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Otomatik kapat
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            let isValid = true;
+            
+            // Kullanıcı adı doğrulaması
+            if (username === '') {
+                document.getElementById('username-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('username-error').style.display = 'none';
+            }
+            
+            // Kasıtlı hata: Şifre doğrulaması eksik
+            if (password === '') {
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('password-error').style.display = 'none';
+            }
+            
+            if (isValid) {
+                // Başarılı giriş kontrolü
+                if (username === 'admin' && password === 'password123') {
+                    showToast('Giriş başarılı!', 'success');
+                } else {
+                    showToast('Kullanıcı adı veya şifre hatalı!', 'error');
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

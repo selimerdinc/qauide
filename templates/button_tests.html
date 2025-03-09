@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buton Testleri - Test Senaryosu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2ecc71;
+            --secondary-dark: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --text-color: #444;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .card-header h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-success {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-success:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--danger-color);
+            opacity: 0.9;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background-color: var(--warning-color);
+            opacity: 0.9;
+        }
+        
+        .btn-disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .btn-disabled:hover {
+            background-color: #95a5a6;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-large {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-rounded {
+            border-radius: 50px;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .test-result {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .test-result h3 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        
+        .test-result p {
+            margin-bottom: 5px;
+        }
+        
+        .result-value {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--danger-color);
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            transition: width 0.1s linear;
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toast {
+            min-width: 250px;
+            background-color: white;
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            animation: slideInLeft 0.3s, fadeIn 0.3s;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .toast-message {
+            flex: 1;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: var(--transition);
+        }
+        
+        .toast-close:hover {
+            color: var(--dark-color);
+        }
+        
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Animasyonlar */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        @keyframes flip {
+            0% { transform: perspective(400px) rotateY(0); }
+            100% { transform: perspective(400px) rotateY(360deg); }
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="home-link">← Ana Sayfaya Dön</a>
+        
+        <header>
+            <h1>Buton Testleri</h1>
+            <p>Farklı buton türlerini ve etkileşimlerini test edin</p>
+        </header>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Zamanlı Buton Testi</h2>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki butona tıklayarak 5 saniyelik geri sayımı başlatın:</p>
+                <button id="timedBtn" class="btn btn-danger">Zamanlı Butonu Başlat</button>
+                
+                <div id="timerDisplay" class="timer-display">5</div>
+                
+                <div class="progress-bar">
+                    <div id="progressBarFill" class="progress-bar-fill" style="width: 100%;"></div>
+                </div>
+                
+                <div id="timedBtnResult" class="test-result">
+                    <h3>Test Sonucu</h3>
+                    <p>Başlatma Sayısı: <span id="timerStartCount" class="result-value">0</span></p>
+                    <p>Son Başlatma Zamanı: <span id="lastTimerStart" class="result-value">-</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Çift Tıklama Testi</h2>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki butona çift tıklayın:</p>
+                <button id="doubleClickBtn" class="btn">Çift Tıkla</button>
+                
+                <div id="doubleClickResult" class="test-result">
+                    <h3>Test Sonucu</h3>
+                    <p>Çift Tıklama Sayısı: <span id="doubleClickCount" class="result-value">0</span></p>
+                    <p>Son Çift Tıklama Zamanı: <span id="lastDoubleClick" class="result-value">-</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Devre Dışı Buton Testi</h2>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki butonlardan biri devre dışı bırakılmıştır:</p>
+                <button id="enabledBtn" class="btn">Etkin Buton</button>
+                <button id="disabledBtn" class="btn btn-disabled" disabled>Devre Dışı Buton</button>
+                <button id="toggleDisableBtn" class="btn btn-warning">Butonları Aç/Kapat</button>
+                
+                <div id="disabledBtnResult" class="test-result">
+                    <h3>Test Sonucu</h3>
+                    <p>Durum Değişikliği Sayısı: <span id="toggleCount" class="result-value">0</span></p>
+                    <p>Mevcut Durum: <span id="currentState" class="result-value">İlk buton etkin, ikinci buton devre dışı</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Uzun Basma Testi</h2>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki butona en az 1 saniye basılı tutun:</p>
+                <button id="longPressBtn" class="btn btn-success">Uzun Bas</button>
+                
+                <div id="longPressResult" class="test-result">
+                    <h3>Test Sonucu</h3>
+                    <p>Uzun Basma Sayısı: <span id="longPressCount" class="result-value">0</span></p>
+                    <p>Son Basma Süresi (ms): <span id="longPressDuration" class="result-value">0</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Hızlı Tıklama Testi</h2>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki butona 5 saniye içinde olabildiğince hızlı tıklayın:</p>
+                <button id="startRapidClickTest" class="btn btn-warning">Testi Başlat</button>
+                <button id="rapidClickBtn" class="btn">Buraya Hızlıca Tıkla</button>
+                
+                <div id="rapidClickResult" class="test-result">
+                    <h3>Test Sonucu</h3>
+                    <p>Kalan Süre: <span id="rapidClickTimeLeft" class="result-value">5</span> saniye</p>
+                    <p>Tıklama Sayısı: <span id="rapidClickCount" class="result-value">0</span></p>
+                    <p>Saniyede Tıklama: <span id="clicksPerSecond" class="result-value">0</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Buton Stili Değiştirme Testi</h2>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki butona tıklayarak stilini değiştirin:</p>
+                <button id="styleChangeBtn" class="btn">Stilimi Değiştir</button>
+                
+                <div id="styleChangeResult" class="test-result">
+                    <h3>Test Sonucu</h3>
+                    <p>Stil Değişikliği Sayısı: <span id="styleChangeCount" class="result-value">0</span></p>
+                    <p>Mevcut Stil: <span id="currentStyle" class="result-value">Normal</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Buton Animasyon Testi</h2>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki butona tıklayarak rastgele bir animasyon oynatın:</p>
+                <button id="animationBtn" class="btn">Animasyon Oynat</button>
+                
+                <div id="animationResult" class="test-result">
+                    <h3>Test Sonucu</h3>
+                    <p>Animasyon Sayısı: <span id="animationCount" class="result-value">0</span></p>
+                    <p>Son Animasyon: <span id="lastAnimation" class="result-value">-</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Sayaç Butonları</h2>
+            </div>
+            <div class="card-body">
+                <p>Aşağıdaki butonları kullanarak sayacı artırın veya azaltın:</p>
+                <div style="text-align: center; margin: 20px 0;">
+                    <button id="decrementBtn" class="btn btn-danger">-</button>
+                    <span id="counter" style="font-size: 2rem; margin: 0 20px;">0</span>
+                    <button id="incrementBtn" class="btn btn-success">+</button>
+                </div>
+                <button id="resetCounterBtn" class="btn btn-block">Sayacı Sıfırla</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toastContainer" class="toast-container"></div>
+    
+    <script>
+        // Toast mesajı gösterme fonksiyonu
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Toast'ı kapat butonu
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Otomatik kapat
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Zamanlı Buton Testi
+        const timedBtn = document.getElementById('timedBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const progressBarFill = document.getElementById('progressBarFill');
+        const timedBtnResult = document.getElementById('timedBtnResult');
+        const timerStartCount = document.getElementById('timerStartCount');
+        const lastTimerStart = document.getElementById('lastTimerStart');
+        let timerStarts = 0;
+        let timerInterval;
+        let isTimerRunning = false;
+        
+        timedBtn.addEventListener('click', function() {
+            if (isTimerRunning) return;
+            
+            isTimerRunning = true;
+            timerStarts++;
+            const now = new Date();
+            lastTimerStart.textContent = now.toLocaleTimeString();
+            timerStartCount.textContent = timerStarts;
+            timedBtnResult.style.display = 'block';
+            
+            let timeLeft = 5;
+            timerDisplay.textContent = timeLeft;
+            progressBarFill.style.width = '100%';
+            
+            showToast('Zamanlı buton başlatıldı!', 'info');
+            
+            // Önceki interval'i temizle
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            timerInterval = setInterval(function() {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                progressBarFill.style.width = (timeLeft / 5 * 100) + '%';
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    isTimerRunning = false;
+                    showToast('Zamanlı buton tamamlandı!', 'success');
+                }
+            }, 1000);
+        });
+        
+        // Çift Tıklama Testi
+        const doubleClickBtn = document.getElementById('doubleClickBtn');
+        const doubleClickResult = document.getElementById('doubleClickResult');
+        const doubleClickCount = document.getElementById('doubleClickCount');
+        const lastDoubleClick = document.getElementById('lastDoubleClick');
+        let doubleClicks = 0;
+        
+        doubleClickBtn.addEventListener('dblclick', function() {
+            doubleClicks++;
+            const now = new Date();
+            lastDoubleClick.textContent = now.toLocaleTimeString();
+            doubleClickCount.textContent = doubleClicks;
+            doubleClickResult.style.display = 'block';
+            showToast('Çift tıklama algılandı!', 'success');
+        });
+        
+        // Devre Dışı Buton Testi
+        const enabledBtn = document.getElementById('enabledBtn');
+        const disabledBtn = document.getElementById('disabledBtn');
+        const toggleDisableBtn = document.getElementById('toggleDisableBtn');
+        const disabledBtnResult = document.getElementById('disabledBtnResult');
+        const toggleCount = document.getElementById('toggleCount');
+        const currentState = document.getElementById('currentState');
+        let toggles = 0;
+        let buttonsEnabled = true;
+        
+        toggleDisableBtn.addEventListener('click', function() {
+            toggles++;
+            buttonsEnabled = !buttonsEnabled;
+            
+            if (buttonsEnabled) {
+                enabledBtn.disabled = false;
+                enabledBtn.classList.remove('btn-disabled');
+                disabledBtn.disabled = true;
+                disabledBtn.classList.add('btn-disabled');
+                currentState.textContent = 'İlk buton etkin, ikinci buton devre dışı';
+            } else {
+                enabledBtn.disabled = true;
+                enabledBtn.classList.add('btn-disabled');
+                disabledBtn.disabled = false;
+                disabledBtn.classList.remove('btn-disabled');
+                currentState.textContent = 'İlk buton devre dışı, ikinci buton etkin';
+            }
+            
+            toggleCount.textContent = toggles;
+            disabledBtnResult.style.display = 'block';
+            showToast('Buton durumları değiştirildi!', 'info');
+        });
+        
+        // Uzun Basma Testi
+        const longPressBtn = document.getElementById('longPressBtn');
+        const longPressResult = document.getElementById('longPressResult');
+        const longPressCount = document.getElementById('longPressCount');
+        const longPressDuration = document.getElementById('longPressDuration');
+        let longPresses = 0;
+        let pressStartTime = 0;
+        
+        longPressBtn.addEventListener('mousedown', function() {
+            pressStartTime = Date.now();
+        });
+        
+        longPressBtn.addEventListener('mouseup', function() {
+            const pressDuration = Date.now() - pressStartTime;
+            if (pressDuration >= 1000) {
+                longPresses++;
+                longPressCount.textContent = longPresses;
+                longPressDuration.textContent = pressDuration;
+                longPressResult.style.display = 'block';
+                showToast(`Uzun basma algılandı! (${pressDuration}ms)`, 'success');
+            }
+        });
+        
+        // Hızlı Tıklama Testi
+        const rapidClickBtn = document.getElementById('rapidClickBtn');
+        const startRapidClickTest = document.getElementById('startRapidClickTest');
+        const rapidClickResult = document.getElementById('rapidClickResult');
+        const rapidClickTimeLeft = document.getElementById('rapidClickTimeLeft');
+        const rapidClickCount = document.getElementById('rapidClickCount');
+        const clicksPerSecond = document.getElementById('clicksPerSecond');
+        let rapidClicks = 0;
+        let rapidClickTestActive = false;
+        let rapidClickTimer;
+        
+        startRapidClickTest.addEventListener('click', function() {
+            if (rapidClickTestActive) return;
+            
+            rapidClickTestActive = true;
+            rapidClicks = 0;
+            rapidClickCount.textContent = rapidClicks;
+            let timeLeft = 5;
+            rapidClickTimeLeft.textContent = timeLeft;
+            rapidClickResult.style.display = 'block';
+            showToast('Hızlı tıklama testi başladı! 5 saniye içinde hızlıca tıklayın.', 'info');
+            
+            // Önceki interval'i temizle
+            if (rapidClickTimer) {
+                clearInterval(rapidClickTimer);
+            }
+            
+            rapidClickTimer = setInterval(function() {
+                timeLeft--;
+                rapidClickTimeLeft.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(rapidClickTimer);
+                    rapidClickTestActive = false;
+                    clicksPerSecond.textContent = (rapidClicks / 5).toFixed(1);
+                    showToast(`Test tamamlandı! Saniyede ${(rapidClicks / 5).toFixed(1)} tıklama.`, 'success');
+                }
+            }, 1000);
+        });
+        
+        rapidClickBtn.addEventListener('click', function() {
+            if (rapidClickTestActive) {
+                rapidClicks++;
+                rapidClickCount.textContent = rapidClicks;
+            } else {
+                showToast('Lütfen önce testi başlatın!', 'warning');
+            }
+        });
+        
+        // Buton Stili Değiştirme Testi
+        const styleChangeBtn = document.getElementById('styleChangeBtn');
+        const styleChangeResult = document.getElementById('styleChangeResult');
+        const currentStyle = document.getElementById('currentStyle');
+        const styleChangeCount = document.getElementById('styleChangeCount');
+        let styleChanges = 0;
+        const styles = [
+            { name: 'Normal', classes: ['btn'] },
+            { name: 'Başarı', classes: ['btn', 'btn-success'] },
+            { name: 'Tehlike', classes: ['btn', 'btn-danger'] },
+            { name: 'Uyarı', classes: ['btn', 'btn-warning'] },
+            { name: 'Çizgili', classes: ['btn', 'btn-outline'] },
+            { name: 'Büyük', classes: ['btn', 'btn-large'] },
+            { name: 'Küçük', classes: ['btn', 'btn-small'] },
+            { name: 'Yuvarlak', classes: ['btn', 'btn-rounded'] }
+        ];
+        let currentStyleIndex = 0;
+        
+        styleChangeBtn.addEventListener('click', function() {
+            styleChanges++;
+            currentStyleIndex = (currentStyleIndex + 1) % styles.length;
+            const newStyle = styles[currentStyleIndex];
+            
+            // Tüm sınıfları kaldır
+            styleChangeBtn.className = '';
+            
+            // Yeni sınıfları ekle
+            newStyle.classes.forEach(cls => {
+                styleChangeBtn.classList.add(cls);
+            });
+            
+            currentStyle.textContent = newStyle.name;
+            styleChangeCount.textContent = styleChanges;
+            styleChangeResult.style.display = 'block';
+            showToast(`Buton stili değiştirildi: ${newStyle.name}`, 'info');
+        });
+        
+        // Buton Animasyon Testi
+        const animationBtn = document.getElementById('animationBtn');
+        const animationResult = document.getElementById('animationResult');
+        const animationCount = document.getElementById('animationCount');
+        const lastAnimation = document.getElementById('lastAnimation');
+        let animations = 0;
+        const animationTypes = ['shake', 'pulse', 'bounce', 'flip', 'rotate'];
+        
+        animationBtn.addEventListener('click', function() {
+            animations++;
+            const randomAnimation = animationTypes[Math.floor(Math.random() * animationTypes.length)];
+            
+            // Önceki animasyonu kaldır
+            animationBtn.style.animation = 'none';
+            
+            // Yeni animasyonu uygula
+            setTimeout(() => {
+                animationBtn.style.animation = `${randomAnimation} 0.5s`;
+            }, 10);
+            
+            animationCount.textContent = animations;
+            lastAnimation.textContent = randomAnimation;
+            animationResult.style.display = 'block';
+            showToast(`Animasyon oynatıldı: ${randomAnimation}`, 'info');
+        });
+        
+        // Sayaç Butonu
+        const counter = document.getElementById('counter');
+        const incrementBtn = document.getElementById('incrementBtn');
+        const decrementBtn = document.getElementById('decrementBtn');
+        const resetCounterBtn = document.getElementById('resetCounterBtn');
+        let count = 0;
+        
+        incrementBtn.addEventListener('click', function() {
+            count++;
+            counter.textContent = count;
+            showToast(`Sayaç artırıldı: ${count}`, 'success');
+        });
+        
+        decrementBtn.addEventListener('click', function() {
+            count--;
+            counter.textContent = count;
+            showToast(`Sayaç azaltıldı: ${count}`, 'info');
+        });
+        
+        resetCounterBtn.addEventListener('click', function() {
+            count = 0;
+            counter.textContent = count;
+            showToast('Sayaç sıfırlandı', 'warning');
+        });
+        
+        // Sayfa yüklendiğinde toast göster
+        window.addEventListener('load', function() {
+            showToast('Buton testleri sayfası yüklendi!', 'success');
+        });
+    </script>
+</body>
+</html 

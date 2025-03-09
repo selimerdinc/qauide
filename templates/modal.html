@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Testi - Test Senaryosu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2ecc71;
+            --secondary-dark: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --text-color: #444;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .card-header h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-success {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-success:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-warning:hover {
+            background-color: #d35400;
+        }
+        
+        /* Modal Stilleri */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 0;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--danger-color);
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* Form Stilleri */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        /* Toast Bildirimleri */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toast {
+            min-width: 250px;
+            background-color: white;
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            animation: slideInLeft 0.3s, fadeIn 0.3s;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .toast-message {
+            flex: 1;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: var(--transition);
+        }
+        
+        .toast-close:hover {
+            color: var(--dark-color);
+        }
+        
+        /* Test Sonuçları */
+        .test-result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .test-result h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .test-result p {
+            margin: 5px 0;
+        }
+        
+        .test-result ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .test-result.success {
+            border-left-color: var(--secondary-color);
+        }
+        
+        .test-result.success h3 {
+            color: var(--secondary-color);
+        }
+        
+        .test-result.error {
+            border-left-color: var(--danger-color);
+        }
+        
+        .test-result.error h3 {
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Modal Testi</h1>
+            <p>Modal pencere açma, kapatma ve içerik kontrolü için test senaryosu</p>
+        </header>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Modal Pencere Testleri</h2>
+            </div>
+            <div class="card-body">
+                <div class="btn-group">
+                    <button class="btn" id="openBasicModal">Basit Modal</button>
+                    <button class="btn btn-success" id="openFormModal">Form Modal</button>
+                    <button class="btn btn-warning" id="openLargeContentModal">Büyük İçerik Modal</button>
+                    <button class="btn btn-danger" id="openConfirmModal">Onay Modal</button>
+                </div>
+                
+                <div class="test-result" id="modalTestResult" style="display: none;">
+                    <h3>Test Sonucu</h3>
+                    <div id="modalTestResultContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Modal Başlık</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                Modal içeriği burada görüntülenecek.
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <button class="btn btn-secondary" id="modalCancelBtn">İptal</button>
+                <button class="btn" id="modalOkBtn">Tamam</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Modal elementleri
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalFooter = document.getElementById('modalFooter');
+        const modalClose = document.getElementById('modalClose');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+        const modalOkBtn = document.getElementById('modalOkBtn');
+        
+        // Modal açma butonları
+        const openBasicModalBtn = document.getElementById('openBasicModal');
+        const openFormModalBtn = document.getElementById('openFormModal');
+        const openLargeContentModalBtn = document.getElementById('openLargeContentModal');
+        const openConfirmModalBtn = document.getElementById('openConfirmModal');
+        
+        // Test sonuç alanı
+        const modalTestResult = document.getElementById('modalTestResult');
+        const modalTestResultContent = document.getElementById('modalTestResultContent');
+        
+        // Basit modal aç
+        openBasicModalBtn.addEventListener('click', function() {
+            modalTitle.textContent = 'Basit Modal';
+            modalBody.innerHTML = `
+                <p>Bu basit bir modal penceredir. Modallar, kullanıcının dikkatini belirli bir içeriğe veya eyleme odaklamak için kullanılır.</p>
+                <p>Modalı kapatmak için:</p>
+                <ul>
+                    <li>Sağ üst köşedeki X butonuna tıklayın</li>
+                    <li>Modal dışına tıklayın</li>
+                    <li>ESC tuşuna basın</li>
+                    <li>Alttaki butonları kullanın</li>
+                </ul>
+            `;
+            modalFooter.style.display = 'flex';
+            modalCancelBtn.textContent = 'Kapat';
+            modalOkBtn.textContent = 'Tamam';
+            modalOkBtn.className = 'btn';
+            
+            openModal();
+            logModalAction('Basit modal açıldı');
+        });
+        
+        // Form modal aç
+        openFormModalBtn.addEventListener('click', function() {
+            modalTitle.textContent = 'Form Modal';
+            modalBody.innerHTML = `
+                <form id="modalForm">
+                    <div class="form-group">
+                        <label for="name">Ad Soyad</label>
+                        <input type="text" id="name" class="form-control" placeholder="Ad Soyad giriniz">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-posta</label>
+                        <input type="email" id="email" class="form-control" placeholder="E-posta adresinizi giriniz">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mesaj</label>
+                        <textarea id="message" class="form-control" rows="4" placeholder="Mesajınızı giriniz"></textarea>
+                    </div>
+                </form>
+            `;
+            modalFooter.style.display = 'flex';
+            modalCancelBtn.textContent = 'İptal';
+            modalOkBtn.textContent = 'Gönder';
+            modalOkBtn.className = 'btn btn-success';
+            
+            openModal();
+            logModalAction('Form modal açıldı');
+        });
+        
+        // Büyük içerik modal aç
+        openLargeContentModalBtn.addEventListener('click', function() {
+            modalTitle.textContent = 'Büyük İçerik Modal';
+            
+            // Büyük içerik oluştur
+            let content = '<h3>Lorem Ipsum Nedir?</h3>';
+            for (let i = 0; i < 5; i++) {
+                content += `
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit odio.</p>
+                    <p>Proin quis tortor orci. Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus tortor. Nulla facilisi. Duis aliquet egestas purus in blandit.</p>
+                `;
+            }
+            
+            modalBody.innerHTML = content;
+            modalFooter.style.display = 'flex';
+            modalCancelBtn.textContent = 'Kapat';
+            modalOkBtn.textContent = 'Tamam';
+            modalOkBtn.className = 'btn';
+            
+            openModal();
+            logModalAction('Büyük içerik modal açıldı');
+        });
+        
+        // Onay modal aç
+        openConfirmModalBtn.addEventListener('click', function() {
+            modalTitle.textContent = 'İşlemi Onaylayın';
+            modalBody.innerHTML = `
+                <p>Bu işlemi gerçekleştirmek istediğinizden emin misiniz?</p>
+                <p>Bu işlem geri alınamaz.</p>
+            `;
+            modalFooter.style.display = 'flex';
+            modalCancelBtn.textContent = 'İptal';
+            modalOkBtn.textContent = 'Evet, Onayla';
+            modalOkBtn.className = 'btn btn-danger';
+            
+            openModal();
+            logModalAction('Onay modal açıldı');
+        });
+        
+        // Modal aç
+        function openModal() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Sayfanın kaydırılmasını engelle
+        }
+        
+        // Modal kapat
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = ''; // Sayfanın kaydırılmasını tekrar etkinleştir
+            logModalAction('Modal kapatıldı');
+        }
+        
+        // Modal kapatma butonları
+        modalClose.addEventListener('click', closeModal);
+        modalCancelBtn.addEventListener('click', closeModal);
+        
+        // Modal tamam butonu
+        modalOkBtn.addEventListener('click', function() {
+            // Form modalı için form verilerini al
+            if (modalTitle.textContent === 'Form Modal') {
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const message = document.getElementById('message').value;
+                
+                if (name && email && message) {
+                    logModalAction('Form gönderildi', {
+                        name: name,
+                        email: email,
+                        message: message
+                    });
+                    showToast('Form başarıyla gönderildi!', 'success');
+                } else {
+                    logModalAction('Form eksik bilgilerle gönderilmeye çalışıldı');
+                    showToast('Lütfen tüm alanları doldurun!', 'error');
+                    return; // Modalı kapatma
+                }
+            } else if (modalTitle.textContent === 'İşlemi Onaylayın') {
+                logModalAction('İşlem onaylandı');
+                showToast('İşlem başarıyla onaylandı!', 'success');
+            } else {
+                logModalAction('Modal tamam butonuna tıklandı');
+            }
+            
+            closeModal();
+        });
+        
+        // Modal dışına tıklama
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                closeModal();
+                logModalAction('Modal dışına tıklanarak kapatıldı');
+            }
+        });
+        
+        // ESC tuşu ile kapatma
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+                logModalAction('ESC tuşu ile kapatıldı');
+            }
+        });
+        
+        // Modal işlemlerini kaydet
+        function logModalAction(action, data = null) {
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString();
+            
+            let logMessage = `<p><strong>${timestamp}:</strong> ${action}</p>`;
+            
+            if (data) {
+                logMessage += '<ul>';
+                for (const key in data) {
+                    logMessage += `<li><strong>${key}:</strong> ${data[key]}</li>`;
+                }
+                logMessage += '</ul>';
+            }
+            
+            modalTestResultContent.innerHTML = logMessage + modalTestResultContent.innerHTML;
+            modalTestResult.style.display = 'block';
+            
+            // Sadece 10 log kaydı tut
+            const logs = modalTestResultContent.querySelectorAll('p');
+            if (logs.length > 10) {
+                for (let i = 10; i < logs.length; i++) {
+                    const nextElement = logs[i].nextElementSibling;
+                    if (nextElement && nextElement.tagName === 'UL') {
+                        nextElement.remove();
+                    }
+                    logs[i].remove();
+                }
+            }
+        }
+        
+        // Toast message göster
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Toast'ı kapat butonu
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Otomatik kapat
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+        
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            showToast('Modal test sayfası yüklendi!', 'info');
+        });
+    </script>
+</body>
+</html> 

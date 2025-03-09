@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Doğrulama Testi - Test Senaryosu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2ecc71;
+            --secondary-dark: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --text-color: #444;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 15px 20px;
+        }
+        
+        .card-header h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .error {
+            border-color: var(--danger-color);
+        }
+        
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-dark);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .btn-disabled:hover {
+            background-color: #95a5a6;
+        }
+        
+        .validation-summary {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .validation-summary h3 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        
+        .validation-summary ul {
+            list-style-type: none;
+        }
+        
+        .validation-summary li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .validation-summary li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+        }
+        
+        .validation-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .validation-item:last-child {
+            border-bottom: none;
+        }
+        
+        .validation-item .status {
+            font-weight: 500;
+        }
+        
+        .form-data {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .form-data h3 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        
+        .form-data-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-data-item:last-child {
+            border-bottom: none;
+        }
+        
+        .form-data-item .value {
+            font-weight: 500;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .checkbox-group label {
+            display: inline;
+            margin-bottom: 0;
+        }
+        
+        /* Toast mesajları */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .toast {
+            min-width: 250px;
+            background-color: white;
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            animation: slideInLeft 0.3s, fadeIn 0.3s;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .toast-message {
+            flex: 1;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: var(--transition);
+        }
+        
+        .toast-close:hover {
+            color: var(--dark-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .toast-container {
+                left: 20px;
+                right: 20px;
+            }
+            
+            .toast {
+                min-width: auto;
+                max-width: none;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Form Doğrulama Testi</h1>
+            <p>Form doğrulama özelliklerini test edin. Geçerli ve geçersiz verilerle formları doldurun.</p>
+        </header>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Kayıt Formu</h2>
+            </div>
+            <div class="card-body">
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="name">Ad Soyad</label>
+                        <input type="text" id="name" name="name" placeholder="Ad Soyad giriniz" required>
+                        <div class="error-message" id="nameError">Ad Soyad en az 3 karakter olmalıdır.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">E-posta</label>
+                        <input type="email" id="email" name="email" placeholder="E-posta adresinizi giriniz" required>
+                        <div class="error-message" id="emailError">Geçerli bir e-posta adresi giriniz.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Şifre</label>
+                        <input type="password" id="password" name="password" placeholder="Şifrenizi giriniz" required>
+                        <div class="error-message" id="passwordError">Şifre en az 8 karakter olmalı ve en az bir büyük harf, bir küçük harf ve bir rakam içermelidir.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Şifre Tekrarı</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Şifrenizi tekrar giriniz" required>
+                        <div class="error-message" id="confirmPasswordError">Şifreler eşleşmiyor.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="age">Yaş</label>
+                        <input type="number" id="age" name="age" placeholder="Yaşınızı giriniz" required>
+                        <div class="error-message" id="ageError">Yaş 18 ile 100 arasında olmalıdır.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Telefon</label>
+                        <input type="tel" id="phone" name="phone" placeholder="5XX XXX XXXX" required>
+                        <div class="error-message" id="phoneError">Geçerli bir telefon numarası giriniz (örn: 5XX XXX XXXX).</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country">Ülke</label>
+                        <select id="country" name="country" required>
+                            <option value="">Ülke seçiniz</option>
+                            <option value="tr">Türkiye</option>
+                            <option value="us">Amerika Birleşik Devletleri</option>
+                            <option value="gb">Birleşik Krallık</option>
+                            <option value="de">Almanya</option>
+                            <option value="fr">Fransa</option>
+                            <option value="it">İtalya</option>
+                            <option value="es">İspanya</option>
+                            <option value="ru">Rusya</option>
+                            <option value="jp">Japonya</option>
+                            <option value="cn">Çin</option>
+                        </select>
+                        <div class="error-message" id="countryError">Lütfen bir ülke seçiniz.</div>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">Kullanım şartlarını kabul ediyorum</label>
+                        <div class="error-message" id="termsError">Devam etmek için kullanım şartlarını kabul etmelisiniz.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" id="submitBtn" class="btn btn-primary btn-block btn-disabled" disabled>Kayıt Ol</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="reset" id="resetBtn" class="btn btn-danger btn-block">Formu Temizle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Doğrulama Durumu</h2>
+            </div>
+            <div class="card-body">
+                <div class="validation-summary">
+                    <div class="validation-item" id="nameValidation">
+                        <span>Ad Soyad:</span>
+                        <span class="status">Geçersiz</span>
+                    </div>
+                    <div class="validation-item" id="emailValidation">
+                        <span>E-posta:</span>
+                        <span class="status">Geçersiz</span>
+                    </div>
+                    <div class="validation-item" id="passwordValidation">
+                        <span>Şifre:</span>
+                        <span class="status">Geçersiz</span>
+                    </div>
+                    <div class="validation-item" id="confirmPasswordValidation">
+                        <span>Şifre Tekrarı:</span>
+                        <span class="status">Geçersiz</span>
+                    </div>
+                    <div class="validation-item" id="ageValidation">
+                        <span>Yaş:</span>
+                        <span class="status">Geçersiz</span>
+                    </div>
+                    <div class="validation-item" id="phoneValidation">
+                        <span>Telefon:</span>
+                        <span class="status">Geçersiz</span>
+                    </div>
+                    <div class="validation-item" id="countryValidation">
+                        <span>Ülke:</span>
+                        <span class="status">Geçersiz</span>
+                    </div>
+                    <div class="validation-item" id="termsValidation">
+                        <span>Kullanım Şartları:</span>
+                        <span class="status">Geçersiz</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Form Verileri</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-data">
+                    <div class="form-data-item">
+                        <span>Ad Soyad:</span>
+                        <span class="value" id="displayName">-</span>
+                    </div>
+                    <div class="form-data-item">
+                        <span>E-posta:</span>
+                        <span class="value" id="displayEmail">-</span>
+                    </div>
+                    <div class="form-data-item">
+                        <span>Şifre:</span>
+                        <span class="value" id="displayPassword">-</span>
+                    </div>
+                    <div class="form-data-item">
+                        <span>Yaş:</span>
+                        <span class="value" id="displayAge">-</span>
+                    </div>
+                    <div class="form-data-item">
+                        <span>Telefon:</span>
+                        <span class="value" id="displayPhone">-</span>
+                    </div>
+                    <div class="form-data-item">
+                        <span>Ülke:</span>
+                        <span class="value" id="displayCountry">-</span>
+                    </div>
+                    <div class="form-data-item">
+                        <span>Kullanım Şartları:</span>
+                        <span class="value" id="displayTerms">Kabul Edilmedi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toastContainer" class="toast-container"></div>
+    
+    <script>
+        // Form elemanlarını seç
+        const form = document.getElementById('registrationForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const ageInput = document.getElementById('age');
+        const phoneInput = document.getElementById('phone');
+        const countryInput = document.getElementById('country');
+        const termsInput = document.getElementById('terms');
+        const submitBtn = document.getElementById('submitBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        
+        // Hata mesajı elemanlarını seç
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        const ageError = document.getElementById('ageError');
+        const phoneError = document.getElementById('phoneError');
+        const countryError = document.getElementById('countryError');
+        const termsError = document.getElementById('termsError');
+        
+        // Doğrulama durumu elemanlarını seç
+        const nameValidation = document.getElementById('nameValidation');
+        const emailValidation = document.getElementById('emailValidation');
+        const passwordValidation = document.getElementById('passwordValidation');
+        const confirmPasswordValidation = document.getElementById('confirmPasswordValidation');
+        const ageValidation = document.getElementById('ageValidation');
+        const phoneValidation = document.getElementById('phoneValidation');
+        const countryValidation = document.getElementById('countryValidation');
+        const termsValidation = document.getElementById('termsValidation');
+        
+        // Doğrulama durumu metin elemanlarını seç
+        const nameValidationStatus = nameValidation.querySelector('.status');
+        const emailValidationStatus = emailValidation.querySelector('.status');
+        const passwordValidationStatus = passwordValidation.querySelector('.status');
+        const confirmPasswordValidationStatus = confirmPasswordValidation.querySelector('.status');
+        const ageValidationStatus = ageValidation.querySelector('.status');
+        const phoneValidationStatus = phoneValidation.querySelector('.status');
+        const countryValidationStatus = countryValidation.querySelector('.status');
+        const termsValidationStatus = termsValidation.querySelector('.status');
+        
+        // Form verileri gösterme elemanlarını seç
+        const displayName = document.getElementById('displayName');
+        const displayEmail = document.getElementById('displayEmail');
+        const displayPassword = document.getElementById('displayPassword');
+        const displayAge = document.getElementById('displayAge');
+        const displayPhone = document.getElementById('displayPhone');
+        const displayCountry = document.getElementById('displayCountry');
+        const displayTerms = document.getElementById('displayTerms');
+        
+        // Doğrulama fonksiyonları
+        function validateName(name) {
+            return name.trim().length >= 3;
+        }
+        
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        function validatePassword(password) {
+            // Özel karakterleri de kabul eden daha esnek bir regex
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+            return passwordRegex.test(password);
+        }
+        
+        function validateConfirmPassword(password, confirmPassword) {
+            return password === confirmPassword && password !== '';
+        }
+        
+        function validateAge(age) {
+            const ageNum = parseInt(age);
+            return ageNum >= 18 && ageNum <= 100;
+        }
+        
+        function validatePhone(phone) {
+            const phoneRegex = /^5\d{2}[- ]?\d{3}[- ]?\d{4}$/;
+            return phoneRegex.test(phone);
+        }
+        
+        function validateCountry(country) {
+            return country !== '';
+        }
+        
+        function validateTerms(checked) {
+            return checked;
+        }
+        
+        // Hata gösterme/gizleme
+        function showError(input, errorElement) {
+            input.classList.add('error');
+            errorElement.style.display = 'block';
+        }
+        
+        function hideError(input, errorElement) {
+            input.classList.remove('error');
+            errorElement.style.display = 'none';
+        }
+        
+        // Doğrulama durumunu güncelleme
+        function updateValidationStatus(element, isValid) {
+            if (isValid) {
+                element.style.color = 'var(--secondary-color)';
+                element.querySelector('.status').textContent = 'Geçerli';
+                element.querySelector('.status').style.color = 'var(--secondary-color)';
+            } else {
+                element.style.color = 'var(--danger-color)';
+                element.querySelector('.status').textContent = 'Geçersiz';
+                element.querySelector('.status').style.color = 'var(--danger-color)';
+            }
+        }
+        
+        // Form verilerini gösterme
+        function updateFormDataDisplay() {
+            displayName.textContent = nameInput.value || '-';
+            displayEmail.textContent = emailInput.value || '-';
+            displayPassword.textContent = passwordInput.value ? '••••••••' : '-';
+            displayAge.textContent = ageInput.value || '-';
+            displayPhone.textContent = phoneInput.value || '-';
+            displayCountry.textContent = countryInput.options[countryInput.selectedIndex]?.text || '-';
+            displayTerms.textContent = termsInput.checked ? 'Kabul Edildi' : 'Kabul Edilmedi';
+            
+            // Durumları güncelle
+            const nameValid = validateName(nameInput.value);
+            const emailValid = validateEmail(emailInput.value);
+            const passwordValid = validatePassword(passwordInput.value);
+            const confirmPasswordValid = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
+            const ageValid = validateAge(ageInput.value);
+            const phoneValid = validatePhone(phoneInput.value);
+            const countryValid = validateCountry(countryInput.value);
+            const termsValid = validateTerms(termsInput.checked);
+            
+            nameValidationStatus.textContent = nameValid ? 'Geçerli' : 'Geçersiz';
+            nameValidationStatus.style.color = nameValid ? 'var(--secondary-color)' : 'var(--danger-color)';
+            
+            emailValidationStatus.textContent = emailValid ? 'Geçerli' : 'Geçersiz';
+            emailValidationStatus.style.color = emailValid ? 'var(--secondary-color)' : 'var(--danger-color)';
+            
+            passwordValidationStatus.textContent = passwordValid ? 'Geçerli' : 'Geçersiz';
+            passwordValidationStatus.style.color = passwordValid ? 'var(--secondary-color)' : 'var(--danger-color)';
+            
+            confirmPasswordValidationStatus.textContent = confirmPasswordValid ? 'Geçerli' : 'Geçersiz';
+            confirmPasswordValidationStatus.style.color = confirmPasswordValid ? 'var(--secondary-color)' : 'var(--danger-color)';
+            
+            ageValidationStatus.textContent = ageValid ? 'Geçerli' : 'Geçersiz';
+            ageValidationStatus.style.color = ageValid ? 'var(--secondary-color)' : 'var(--danger-color)';
+            
+            phoneValidationStatus.textContent = phoneValid ? 'Geçerli' : 'Geçersiz';
+            phoneValidationStatus.style.color = phoneValid ? 'var(--secondary-color)' : 'var(--danger-color)';
+            
+            countryValidationStatus.textContent = countryValid ? 'Geçerli' : 'Geçersiz';
+            countryValidationStatus.style.color = countryValid ? 'var(--secondary-color)' : 'var(--danger-color)';
+            
+            termsValidationStatus.textContent = termsValid ? 'Geçerli' : 'Geçersiz';
+            termsValidationStatus.style.color = termsValid ? 'var(--secondary-color)' : 'var(--danger-color)';
+            
+            // Tüm alanlar geçerliyse butonu etkinleştir
+            const allValid = nameValid && emailValid && passwordValid && confirmPasswordValid && 
+                            ageValid && phoneValid && countryValid && termsValid;
+            
+            if (allValid) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-disabled');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('btn-disabled');
+            }
+        }
+        
+        // Toast message göster
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Toast'ı kapat butonu
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Otomatik kapat
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+        
+        // Değişken tanımlamaları
+        let nameTimeout = null;
+        let emailTimeout = null;
+        let passwordTimeout = null;
+        let confirmPasswordTimeout = null;
+        let ageTimeout = null;
+        let phoneTimeout = null;
+        
+        // Input değişikliklerini dinle
+        nameInput.addEventListener('input', function() {
+            // Timeout'u temizle
+            clearTimeout(nameTimeout);
+            
+            // Yeni timeout oluştur
+            nameTimeout = setTimeout(() => {
+                const isValid = validateName(this.value);
+                if (isValid) {
+                    hideError(this, nameError);
+                    updateValidationStatus(nameValidation, true);
+                    showToast('Ad Soyad geçerli!', 'success');
+                } else if (this.value.trim() !== '') {
+                    showError(this, nameError);
+                    updateValidationStatus(nameValidation, false);
+                    showToast('Ad Soyad en az 3 karakter olmalıdır!', 'error');
+                }
+                updateFormDataDisplay();
+            }, 500);
+        });
+        
+        emailInput.addEventListener('input', function() {
+            clearTimeout(emailTimeout);
+            
+            emailTimeout = setTimeout(() => {
+                const isValid = validateEmail(this.value);
+                if (isValid) {
+                    hideError(this, emailError);
+                    updateValidationStatus(emailValidation, true);
+                    showToast('E-posta geçerli!', 'success');
+                } else if (this.value.trim() !== '') {
+                    showError(this, emailError);
+                    updateValidationStatus(emailValidation, false);
+                    showToast('Geçerli bir e-posta adresi giriniz!', 'error');
+                }
+                updateFormDataDisplay();
+            }, 500);
+        });
+        
+        passwordInput.addEventListener('input', function() {
+            clearTimeout(passwordTimeout);
+            
+            passwordTimeout = setTimeout(() => {
+                const isValid = validatePassword(this.value);
+                if (isValid) {
+                    hideError(this, passwordError);
+                    updateValidationStatus(passwordValidation, true);
+                    showToast('Şifre geçerli!', 'success');
+                } else if (this.value.trim() !== '') {
+                    showError(this, passwordError);
+                    updateValidationStatus(passwordValidation, false);
+                    showToast('Şifre en az 8 karakter olmalı ve en az bir büyük harf, bir küçük harf ve bir rakam içermelidir!', 'error');
+                }
+                
+                // Şifre tekrarını da kontrol et
+                if (confirmPasswordInput.value) {
+                    const isConfirmValid = validateConfirmPassword(this.value, confirmPasswordInput.value);
+                    if (isConfirmValid) {
+                        hideError(confirmPasswordInput, confirmPasswordError);
+                        updateValidationStatus(confirmPasswordValidation, true);
+                    } else {
+                        showError(confirmPasswordInput, confirmPasswordError);
+                        updateValidationStatus(confirmPasswordValidation, false);
+                        showToast('Şifreler eşleşmiyor!', 'error');
+                    }
+                }
+                
+                updateFormDataDisplay();
+            }, 500);
+        });
+        
+        confirmPasswordInput.addEventListener('input', function() {
+            clearTimeout(confirmPasswordTimeout);
+            
+            confirmPasswordTimeout = setTimeout(() => {
+                const isValid = validateConfirmPassword(passwordInput.value, this.value);
+                if (isValid) {
+                    hideError(this, confirmPasswordError);
+                    updateValidationStatus(confirmPasswordValidation, true);
+                    showToast('Şifreler eşleşiyor!', 'success');
+                } else if (this.value.trim() !== '') {
+                    showError(this, confirmPasswordError);
+                    updateValidationStatus(confirmPasswordValidation, false);
+                    showToast('Şifreler eşleşmiyor!', 'error');
+                }
+                updateFormDataDisplay();
+            }, 500);
+        });
+        
+        ageInput.addEventListener('input', function() {
+            clearTimeout(ageTimeout);
+            
+            ageTimeout = setTimeout(() => {
+                const isValid = validateAge(this.value);
+                if (isValid) {
+                    hideError(this, ageError);
+                    updateValidationStatus(ageValidation, true);
+                    showToast('Yaş geçerli!', 'success');
+                } else if (this.value.trim() !== '') {
+                    showError(this, ageError);
+                    updateValidationStatus(ageValidation, false);
+                    showToast('Yaş 18 ile 100 arasında olmalıdır!', 'error');
+                }
+                updateFormDataDisplay();
+            }, 500);
+        });
+        
+        phoneInput.addEventListener('input', function() {
+            clearTimeout(phoneTimeout);
+            
+            phoneTimeout = setTimeout(() => {
+                const isValid = validatePhone(this.value);
+                if (isValid) {
+                    hideError(this, phoneError);
+                    updateValidationStatus(phoneValidation, true);
+                    showToast('Telefon numarası geçerli!', 'success');
+                } else if (this.value.trim() !== '') {
+                    showError(this, phoneError);
+                    updateValidationStatus(phoneValidation, false);
+                    showToast('Geçerli bir telefon numarası giriniz (örn: 5XX XXX XXXX)!', 'error');
+                }
+                updateFormDataDisplay();
+            }, 500);
+        });
+        
+        countryInput.addEventListener('change', function() {
+            const isValid = validateCountry(this.value);
+            if (isValid) {
+                hideError(this, countryError);
+                updateValidationStatus(countryValidation, true);
+                showToast('Ülke seçimi geçerli!', 'success');
+            } else {
+                showError(this, countryError);
+                updateValidationStatus(countryValidation, false);
+                showToast('Lütfen bir ülke seçiniz!', 'error');
+            }
+            updateFormDataDisplay();
+        });
+        
+        termsInput.addEventListener('change', function() {
+            const isValid = validateTerms(this.checked);
+            if (isValid) {
+                hideError(this, termsError);
+                updateValidationStatus(termsValidation, true);
+                showToast('Kullanım şartları kabul edildi!', 'success');
+            } else {
+                showError(this, termsError);
+                updateValidationStatus(termsValidation, false);
+                showToast('Devam etmek için kullanım şartlarını kabul etmelisiniz!', 'error');
+            }
+            updateFormDataDisplay();
+        });
+        
+        // Form gönderimi
+        registrationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Tüm alanları doğrula
+            const nameValid = validateName(nameInput.value);
+            const emailValid = validateEmail(emailInput.value);
+            const passwordValid = validatePassword(passwordInput.value);
+            const confirmPasswordValid = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
+            const ageValid = validateAge(ageInput.value);
+            const phoneValid = validatePhone(phoneInput.value);
+            const countryValid = validateCountry(countryInput.value);
+            const termsValid = validateTerms(termsInput.checked);
+            
+            const allValid = nameValid && emailValid && passwordValid && confirmPasswordValid && 
+                            ageValid && phoneValid && countryValid && termsValid;
+            
+            if (allValid) {
+                showToast('Form başarıyla gönderildi!', 'success');
+                updateFormDataDisplay(); // Form verilerini göster
+            } else {
+                showToast('Lütfen formdaki hataları düzeltin!', 'error');
+            }
+        });
+        
+        // Formu temizle
+        resetBtn.addEventListener('click', function() {
+            registrationForm.reset();
+            
+            // Hata mesajlarını temizle
+            const errorInputs = document.querySelectorAll('.error');
+            const errorMessages = document.querySelectorAll('.error-message');
+            
+            errorInputs.forEach(input => {
+                input.classList.remove('error');
+            });
+            
+            errorMessages.forEach(message => {
+                message.style.display = 'none';
+            });
+            
+            // Doğrulama durumlarını sıfırla
+            const validationElements = document.querySelectorAll('.validation-item');
+            validationElements.forEach(element => {
+                element.style.color = 'var(--danger-color)';
+                element.querySelector('.status').textContent = 'Geçersiz';
+                element.querySelector('.status').style.color = 'var(--danger-color)';
+            });
+            
+            // Butonu devre dışı bırak
+            submitBtn.disabled = true;
+            submitBtn.classList.add('btn-disabled');
+            
+            // Form verilerini güncelle
+            updateFormDataDisplay();
+            
+            showToast('Form temizlendi!', 'warning');
+        });
+        
+        // Sayfa yüklendiğinde form verilerini göster
+        updateFormDataDisplay();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablo Veri Testi - Test Senaryosu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+        th:hover {
+            background-color: #ddd;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .table-controls {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .search-box {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 250px;
+        }
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+        .pagination li {
+            margin: 0 5px;
+        }
+        .pagination a {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: #f2f2f2;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+        .pagination a.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn {
+            padding: 8px 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        .btn-success {
+            background-color: #2ecc71;
+        }
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        .table-info {
+            margin-top: 10px;
+            color: #666;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 25px;
+            border: 1px solid #888;
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close:hover {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .modal-footer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .modal-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .modal-btn-cancel {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        .modal-btn-cancel:hover {
+            background-color: #ddd;
+        }
+        .modal-btn-confirm {
+            background-color: #3498db;
+            color: white;
+        }
+        .modal-btn-confirm:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Toast Message Stili */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .toast {
+            background-color: #333;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+            max-width: 300px;
+        }
+        .toast.success {
+            background-color: #2ecc71;
+        }
+        .toast.error {
+            background-color: #e74c3c;
+        }
+        .toast.warning {
+            background-color: #f39c12;
+        }
+        .toast-icon {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        .toast-message {
+            flex-grow: 1;
+        }
+        .toast-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tablo Veri Testi</h1>
+        
+        <div class="table-controls">
+            <input type="text" id="searchBox" class="search-box" placeholder="Ara...">
+            <div>
+                <button id="addUserBtn" class="btn btn-success">Yeni Kullanıcı Ekle</button>
+                <button id="deleteSelectedBtn" class="btn btn-danger">Seçilenleri Sil</button>
+            </div>
+            <select id="itemsPerPage">
+                <option value="5">5 kayıt</option>
+                <option value="10" selected>10 kayıt</option>
+                <option value="20">20 kayıt</option>
+                <option value="50">50 kayıt</option>
+            </select>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th width="40"><input type="checkbox" id="selectAll"></th>
+                    <th data-sort="id">ID</th>
+                    <th data-sort="name">Ad Soyad</th>
+                    <th data-sort="email">E-posta</th>
+                    <th data-sort="role">Rol</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- Kullanıcılar burada listelenecek -->
+            </tbody>
+        </table>
+        
+        <div class="table-info" id="tableInfo"></div>
+        
+        <ul class="pagination" id="pagination">
+            <!-- Sayfalama burada oluşturulacak -->
+        </ul>
+        
+        <!-- Kullanıcı Ekleme Modal -->
+        <div id="addUserModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Yeni Kullanıcı Ekle</h2>
+                    <span class="close">&times;</span>
+                </div>
+                
+                <form id="addUserForm">
+                    <div class="form-group">
+                        <label for="userName">Ad Soyad:</label>
+                        <input type="text" id="userName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userEmail">E-posta:</label>
+                        <input type="email" id="userEmail" required>
+                        <div id="emailError" class="error-message">Bu e-posta adresi zaten kullanılıyor!</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userRole">Rol:</label>
+                        <select id="userRole" required>
+                            <option value="Admin">Admin</option>
+                            <option value="Editör">Editör</option>
+                            <option value="Kullanıcı">Kullanıcı</option>
+                            <option value="Misafir">Misafir</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="modal-btn modal-btn-cancel" id="cancelAddBtn">İptal</button>
+                        <button type="submit" class="modal-btn modal-btn-confirm">Ekle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Silme Onay Modal -->
+        <div id="deleteConfirmModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Kullanıcıları Sil</h2>
+                    <span class="close">&times;</span>
+                </div>
+                
+                <p id="deleteConfirmMessage">Seçili kullanıcıları silmek istediğinize emin misiniz?</p>
+                
+                <div class="modal-footer">
+                    <button class="modal-btn modal-btn-cancel" id="cancelDeleteBtn">İptal</button>
+                    <button class="modal-btn modal-btn-confirm" id="confirmDeleteBtn">Sil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Message Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <script>
+        // Değişkenler
+        let users = [
+            { id: 1, name: 'Ahmet Yılmaz', email: 'ahmet@example.com', role: 'Admin' },
+            { id: 2, name: 'Ayşe Demir', email: 'ayse@example.com', role: 'Editör' },
+            { id: 3, name: 'Mehmet Kaya', email: 'mehmet@example.com', role: 'Kullanıcı' },
+            { id: 4, name: 'Fatma Şahin', email: 'fatma@example.com', role: 'Kullanıcı' },
+            { id: 5, name: 'Ali Öztürk', email: 'ali@example.com', role: 'Misafir' },
+            { id: 6, name: 'Zeynep Çelik', email: 'zeynep@example.com', role: 'Editör' },
+            { id: 7, name: 'Mustafa Aydın', email: 'mustafa@example.com', role: 'Admin' },
+            { id: 8, name: 'Elif Yıldız', email: 'elif@example.com', role: 'Kullanıcı' },
+            { id: 9, name: 'Hasan Şimşek', email: 'hasan@example.com', role: 'Misafir' },
+            { id: 10, name: 'Selin Arslan', email: 'selin@example.com', role: 'Editör' },
+            { id: 11, name: 'Burak Yılmaz', email: 'burak@example.com', role: 'Kullanıcı' },
+            { id: 12, name: 'Deniz Kara', email: 'deniz@example.com', role: 'Misafir' },
+            { id: 13, name: 'Gizem Aksoy', email: 'gizem@example.com', role: 'Editör' }
+        ];
+        
+        let filteredUsers = [...users];
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let currentSort = { column: 'id', direction: 'asc' };
+        
+        // DOM Elementleri
+        const userTableBody = document.getElementById('userTableBody');
+        const pagination = document.getElementById('pagination');
+        const tableInfo = document.getElementById('tableInfo');
+        const searchBox = document.getElementById('searchBox');
+        
+        // Toast message göster
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+                <button class="toast-close">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Toast'ı kapat butonu
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+            
+            // Otomatik kapat
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Tabloyu oluştur
+        function renderTable() {
+            userTableBody.innerHTML = '';
+            
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedUsers = filteredUsers.slice(start, end);
+            
+            paginatedUsers.forEach(user => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td><input type="checkbox" class="user-checkbox" value="${user.id}"></td>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>
+                        <button class="btn btn-danger delete-btn" data-id="${user.id}">Sil</button>
+                    </td>
+                `;
+                
+                userTableBody.appendChild(row);
+            });
+            
+            // Silme butonları olayı
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteUser(id);
+                });
+            });
+            
+            // Checkbox olayları
+            document.querySelectorAll('.user-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const allChecked = document.querySelectorAll('.user-checkbox:checked').length === paginatedUsers.length;
+                    document.getElementById('selectAll').checked = allChecked;
+                });
+            });
+        }
+        
+        // Sayfalama oluştur
+        function renderPagination() {
+            pagination.innerHTML = '';
+            
+            const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+            
+            // Önceki sayfa
+            const prevLi = document.createElement('li');
+            prevLi.innerHTML = `<a href="#" ${currentPage === 1 ? 'style="opacity: 0.5; pointer-events: none;"' : ''}>«</a>`;
+            prevLi.querySelector('a').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                    renderPagination();
+                    updateTableInfo();
+                }
+            });
+            pagination.appendChild(prevLi);
+            
+            // Sayfa numaraları
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="#" ${i === currentPage ? 'class="active"' : ''}>${i}</a>`;
+                li.querySelector('a').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentPage = i;
+                    renderTable();
+                    renderPagination();
+                    updateTableInfo();
+                });
+                pagination.appendChild(li);
+            }
+            
+            // Sonraki sayfa
+            const nextLi = document.createElement('li');
+            nextLi.innerHTML = `<a href="#" ${currentPage === totalPages ? 'style="opacity: 0.5; pointer-events: none;"' : ''}>»</a>`;
+            nextLi.querySelector('a').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                    renderPagination();
+                    updateTableInfo();
+                }
+            });
+            pagination.appendChild(nextLi);
+        }
+        
+        // Tablo bilgisini güncelle
+        function updateTableInfo() {
+            const start = (currentPage - 1) * itemsPerPage + 1;
+            const end = Math.min(start + itemsPerPage - 1, filteredUsers.length);
+            
+            tableInfo.textContent = `Toplam ${filteredUsers.length} kayıttan ${start}-${end} arası gösteriliyor`;
+        }
+        
+        // Filtreleri uygula
+        function applyFilters() {
+            const searchTerm = searchBox.value.toLowerCase();
+            
+            filteredUsers = users.filter(user => {
+                return (
+                    user.name.toLowerCase().includes(searchTerm) ||
+                    user.email.toLowerCase().includes(searchTerm) ||
+                    user.role.toLowerCase().includes(searchTerm)
+                );
+            });
+            
+            // Sıralama uygula
+            filteredUsers.sort((a, b) => {
+                const aValue = a[currentSort.column];
+                const bValue = b[currentSort.column];
+                
+                if (currentSort.direction === 'asc') {
+                    return aValue > bValue ? 1 : -1;
+                } else {
+                    return aValue < bValue ? 1 : -1;
+                }
+            });
+            
+            currentPage = 1;
+        }
+        
+        // Kullanıcı ekle
+        function addUser(name, email, role) {
+            // E-posta kontrolü
+            const emailExists = users.some(user => user.email.toLowerCase() === email.toLowerCase());
+            
+            if (emailExists) {
+                document.getElementById('emailError').textContent = 'Bu e-posta adresi zaten kullanılıyor!';
+                document.getElementById('emailError').style.display = 'block';
+                showToast('Bu e-posta adresi zaten kullanılıyor!', 'error');
+                return false;
+            }
+            
+            document.getElementById('emailError').style.display = 'none';
+            
+            // Yeni kullanıcı ID'si
+            const newId = users.length > 0 ? Math.max(...users.map(user => user.id)) + 1 : 1;
+            
+            // Yeni kullanıcı
+            const newUser = {
+                id: newId,
+                name: name,
+                email: email,
+                role: role
+            };
+            
+            // Kullanıcıyı ekle
+            users.push(newUser);
+            
+            // Tabloyu güncelle
+            applyFilters();
+            renderTable();
+            renderPagination();
+            updateTableInfo();
+            
+            showToast(`${name} kullanıcısı başarıyla eklendi.`, 'success');
+            
+            // Modal'ı kapat
+            document.getElementById('addUserModal').style.display = 'none';
+            
+            return true;
+        }
+        
+        // Kullanıcı sil
+        function deleteUser(id) {
+            const user = users.find(user => user.id === id);
+            if (user) {
+                // Silme onayı iste
+                document.getElementById('deleteConfirmMessage').textContent = `${user.name} kullanıcısını silmek istediğinize emin misiniz?`;
+                
+                const confirmModal = document.getElementById('deleteConfirmModal');
+                confirmModal.style.display = 'block';
+                
+                // Silme onay butonu
+                document.getElementById('confirmDeleteBtn').onclick = function() {
+                    // Kullanıcıyı sil
+                    users = users.filter(u => u.id !== id);
+                    
+                    // Tabloyu güncelle
+                    applyFilters();
+                    renderTable();
+                    renderPagination();
+                    updateTableInfo();
+                    
+                    showToast(`${user.name} kullanıcısı silindi.`, 'warning');
+                    confirmModal.style.display = 'none';
+                };
+                
+                // İptal butonu
+                document.getElementById('cancelDeleteBtn').onclick = function() {
+                    confirmModal.style.display = 'none';
+                };
+                
+                // Modal dışına tıklayınca kapat
+                window.onclick = function(event) {
+                    if (event.target === confirmModal) {
+                        confirmModal.style.display = 'none';
+                    }
+                };
+            }
+        }
+        
+        // Seçili kullanıcıları sil
+        function deleteSelectedUsers() {
+            const checkboxes = document.querySelectorAll('.user-checkbox:checked');
+            
+            if (checkboxes.length === 0) {
+                showToast('Lütfen silmek için en az bir kullanıcı seçin.', 'warning');
+                return;
+            }
+            
+            const selectedIds = Array.from(checkboxes).map(checkbox => parseInt(checkbox.value));
+            const selectedUsers = users.filter(user => selectedIds.includes(user.id));
+            const userNames = selectedUsers.map(user => user.name).join(', ');
+            
+            document.getElementById('deleteConfirmMessage').textContent = `${checkboxes.length} kullanıcıyı silmek istediğinize emin misiniz?`;
+            
+            const confirmModal = document.getElementById('deleteConfirmModal');
+            confirmModal.style.display = 'block';
+            
+            // Silme onay butonu
+            document.getElementById('confirmDeleteBtn').onclick = function() {
+                // Seçili kullanıcıları sil
+                users = users.filter(user => !selectedIds.includes(user.id));
+                
+                // Tabloyu güncelle
+                applyFilters();
+                renderTable();
+                renderPagination();
+                updateTableInfo();
+                
+                // Tümünü seç checkbox'ını sıfırla
+                document.getElementById('selectAll').checked = false;
+                
+                showToast(`Seçili kullanıcılar silindi: ${userNames}`, 'warning');
+                confirmModal.style.display = 'none';
+            };
+            
+            // İptal butonu
+            document.getElementById('cancelDeleteBtn').onclick = function() {
+                confirmModal.style.display = 'none';
+            };
+            
+            // Modal dışına tıklayınca kapat
+            window.onclick = function(event) {
+                if (event.target === confirmModal) {
+                    confirmModal.style.display = 'none';
+                }
+            };
+        }
+        
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tabloyu oluştur
+            applyFilters();
+            renderTable();
+            renderPagination();
+            updateTableInfo();
+            
+            // Arama kutusu olayı
+            searchBox.addEventListener('input', function() {
+                applyFilters();
+                renderTable();
+                renderPagination();
+                updateTableInfo();
+            });
+            
+            // Sütun başlıkları sıralama olayı
+            document.querySelectorAll('th[data-sort]').forEach(th => {
+                th.addEventListener('click', function() {
+                    const column = this.getAttribute('data-sort');
+                    
+                    if (currentSort.column === column) {
+                        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        currentSort.column = column;
+                        currentSort.direction = 'asc';
+                    }
+                    
+                    applyFilters();
+                    renderTable();
+                    renderPagination();
+                    updateTableInfo();
+                });
+            });
+            
+            // Sayfa başına kayıt sayısı olayı
+            document.getElementById('itemsPerPage').addEventListener('change', function() {
+                itemsPerPage = parseInt(this.value);
+                currentPage = 1;
+                renderTable();
+                renderPagination();
+                updateTableInfo();
+            });
+            
+            // Tümünü seç/kaldır
+            document.getElementById('selectAll').addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.user-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+            
+            // Seçilenleri sil butonu
+            document.getElementById('deleteSelectedBtn').addEventListener('click', function() {
+                deleteSelectedUsers();
+            });
+            
+            // Modal işlemleri
+            const modal = document.getElementById('addUserModal');
+            const addUserBtn = document.getElementById('addUserBtn');
+            const closeBtn = document.querySelector('.close');
+            
+            // Modal'ı aç
+            addUserBtn.addEventListener('click', function() {
+                document.getElementById('emailError').style.display = 'none';
+                document.getElementById('addUserForm').reset();
+                modal.style.display = 'block';
+            });
+            
+            // Modal'ı kapat
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // İptal butonu ile modal'ı kapat
+            document.getElementById('cancelAddBtn').addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Modal dışına tıklayınca kapat
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Kullanıcı ekleme formu
+            document.getElementById('addUserForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('userName').value;
+                const email = document.getElementById('userEmail').value;
+                const role = document.getElementById('userRole').value;
+                
+                const success = addUser(name, email, role);
+                
+                if (success) {
+                    // Formu temizle
+                    this.reset();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

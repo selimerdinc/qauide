@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Otomasyon Web Sayfası</title>
+</head>
+<body>
+    <h1>Test Otomasyon Web Sayfası</h1>
+    <form action="{{ url_for('run_test') }}" method="post">
+        <label for="url">Test Edilecek URL:</label>
+        <input type="text" id="url" name="url" required>
+        <br>
+        <label for="test_scenario">Test Senaryosu:</label>
+        <select id="test_scenario" name="test_scenario">
+            <option value="click_button">Butona Tıklama</option>
+            <!-- Diğer senaryoları buraya ekleyebilirsiniz -->
+        </select>
+        <br>
+        <button type="submit">Testi Çalıştır</button>
+    </form>
+</body>
+</html> 
